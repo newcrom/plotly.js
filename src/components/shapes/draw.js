@@ -23,6 +23,7 @@ var constants = require('./constants');
 var helpers = require('./helpers');
 var getPathString = helpers.getPathString;
 
+var ALWAYS_EDITABLE = true;
 
 // Shapes are stored in gd.layout.shapes, an array of objects
 // index can point to one item in this array,
@@ -177,13 +178,24 @@ function drawOne(gd, index) {
         } else {
             if(gd._context.edits.shapePosition) {
                 setupDragElement(gd, path, options, index, shapeLayer, editHelpers);
-            } else if(options.editable === true) {
-                path.style('pointer-events',
-                    (isOpen || Color.opacity(fillColor) * opacity <= 0.5) ? 'stroke' : 'all'
-                );
+            } else if(ALWAYS_EDITABLE) {
+                path.style('pointer-events', 'all');
             }
         }
-        path.node().addEventListener('click', function() { return activateShape(gd, path); });
+
+        if (options._input.onClick){
+          path.node().addEventListener('click', options._input.onClick);
+        }
+        if (options._input.onMouseEnter){
+          path.node().addEventListener('mouseenter', options._input.onMouseEnter);
+        }
+        if (options._input.onMouseLeave){
+          path.node().addEventListener('mouseleave', options._input.onMouseLeave);
+        }
+
+        queueMicrotask(() => {
+            path.node().addEventListener('mousedown', window.plotlyStartZooming)
+        })
     }
 }
 

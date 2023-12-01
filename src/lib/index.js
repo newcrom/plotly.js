@@ -199,7 +199,7 @@ lib.makeTraceGroups = require('./make_trace_groups');
 
 lib._ = require('./localize');
 
-lib.notifier = require('./notifier');
+lib.notifier = () => {};
 
 lib.filterUnique = require('./filter_unique');
 lib.filterVisible = require('./filter_visible');

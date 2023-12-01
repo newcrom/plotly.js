@@ -22,6 +22,6 @@ module.exports = function click(gd, evt, subplot) {
         } else emitClick();
 
         // why do we get a double event without this???
-        if(evt.stopImmediatePropagation) evt.stopImmediatePropagation();
+        // if(evt.stopImmediatePropagation) evt.stopImmediatePropagation();
     }
 };
