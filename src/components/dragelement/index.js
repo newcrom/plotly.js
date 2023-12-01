@@ -89,6 +89,10 @@ dragElement.init = function init(options) {
 
     element.style.pointerEvents = 'all';
 
+    if(element.classList.contains('nsewdrag')){
+        window.plotlyStartZooming = onStart
+    }
+
     element.onmousedown = onStart;
 
     if(!supportsPassive) {

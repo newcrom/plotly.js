@@ -1,3 +1,5 @@
+**Forked version of plotly.js with some hacks for use in Newcrom's products**
+
 <a href="https://plotly.com/javascript/"><img src="https://images.plot.ly/logo/plotlyjs-logo@2x.png" height="70"></a>
 
 [![npm version](https://badge.fury.io/js/plotly.js.svg)](https://badge.fury.io/js/plotly.js)

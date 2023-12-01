@@ -57,6 +57,9 @@ var numericNameWarningCountLimit = 5;
  *
  */
 function _doPlot(gd, data, layout, config) {
+    const isForceRerender = window.isForceRerender
+    window.isForceRerender = false;
+
     var frames;
 
     gd = Lib.getGraphDiv(gd);
@@ -158,7 +161,7 @@ function _doPlot(gd, data, layout, config) {
 
     // generate calcdata, if we need to
     // to force redoing calcdata, just delete it before calling _doPlot
-    var recalc = !gd.calcdata || gd.calcdata.length !== (gd._fullData || []).length;
+    var recalc = isForceRerender || !gd.calcdata || gd.calcdata.length !== (gd._fullData || []).length;
     if(recalc) Plots.doCalcdata(gd);
 
     // in case it has changed, attach fullData traces to calcdata
@@ -2632,7 +2635,7 @@ function applyUIRevisions(data, layout, oldFullData, oldFullLayout) {
  *      object containing `data`, `layout`, `config`, and `frames` members
  *
  */
-function react(gd, data, layout, config) {
+function react(gd, data, layout, config, isForce) {
     var frames, plotDone;
 
     function addFrames() { return exports.addFrames(gd, frames); }
@@ -2739,8 +2742,9 @@ function react(gd, data, layout, config) {
             seq.push(function() {
                 return Plots.transitionFromReact(gd, restyleFlags, relayoutFlags, oldFullLayout);
             });
-        } else if(restyleFlags.fullReplot || relayoutFlags.layoutReplot || configChanged) {
+        } else if(isForce || restyleFlags.fullReplot || relayoutFlags.layoutReplot || configChanged) {
             gd._fullLayout._skipDefaults = true;
+            window.isForceRerender = true
             seq.push(exports._doPlot);
         } else {
             for(var componentType in relayoutFlags.arrays) {

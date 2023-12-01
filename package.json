@@ -1,10 +1,11 @@
 {
-  "name": "plotly.js",
+  "name": "plotly.js-newcrom",
   "version": "2.27.1",
   "description": "The open source javascript graphing library that powers plotly",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "webpack": "./dist/plotly.js",
+  "main": "./lib/index-newcrom.js",
+  "types": "./lib/index-newcrom.d.ts",
+  "webpack": "./lib/index-newcrom.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/plotly/plotly.js.git"
@@ -22,6 +23,7 @@
   ],
   "scripts": {
     "custom-bundle": "node tasks/custom_bundle.js",
+    "create-newcrom-bundle": "node tasks/custom_bundle.js --unminified --out newcrom --traces scatter --transforms none",
     "bundle": "node tasks/bundle.js",
     "extra-bundles": "node tasks/extra_bundles.js",
     "locales": "node tasks/locales.js",
@@ -62,7 +64,8 @@
     "version": "npm run build && npm run no-bad-char && git add -A lib dist build src/version.js",
     "postversion": "node -e \"console.log('Version bumped and committed. If ok, run: git push && git push --tags')\"",
     "postpublish": "node tasks/sync_packages.js",
-    "postshrinkwrap": "chttps ."
+    "postshrinkwrap": "chttps .",
+    "prepare": "npm run create-newcrom-bundle"
   },
   "browserify": {
     "transform": [
