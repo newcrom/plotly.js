@@ -340,10 +340,12 @@ export interface PlotlyHTMLElement extends HTMLElement {
    */
   _fullLayout: {
     xaxis: {
-      p2d(point: number): number
+      p2d(point: number): number;
+      autorange: boolean;
     },
     yaxis: {
-      p2d(point: number): number
+      p2d(point: number): number;
+      autorange: boolean;
     },
   }
 }
