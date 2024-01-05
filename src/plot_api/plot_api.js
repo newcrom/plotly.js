@@ -57,8 +57,8 @@ var numericNameWarningCountLimit = 5;
  *
  */
 function _doPlot(gd, data, layout, config) {
-    const isForceRerender = window.isForceRerender
-    window.isForceRerender = false;
+    const isForceRerender = window[`plotly-${gd.dataset.chartId}`].isForceRerender
+    window[`plotly-${gd.dataset.chartId}`].isForceRerender = false;
 
     var frames;
 
@@ -330,9 +330,10 @@ function _doPlot(gd, data, layout, config) {
 
         subroutines.doAutoRangeAndConstraints(gd);
 
+        // !!! We don't need to save an initial range because we change it if we apply a detection time.
         // store initial ranges *after* enforcing constraints, otherwise
         // we will never look like we're at the initial ranges
-        if(graphWasEmpty) Axes.saveRangeInitial(gd);
+        // if(graphWasEmpty) Axes.saveRangeInitial(gd);
 
         // this one is different from shapes/annotations calcAutorange
         // the others incorporate those components into ax._extremes,
@@ -365,7 +366,8 @@ function _doPlot(gd, data, layout, config) {
                     gd._fullLayout._insideTickLabelsUpdaterange = undefined;
 
                     return relayout(gd, insideTickLabelsUpdaterange).then(function() {
-                        Axes.saveRangeInitial(gd, true);
+                        // !!! We don't need to save an initial range because we change it if we apply a detection time.
+                        // Axes.saveRangeInitial(gd, true);
                     });
                 }
             }
@@ -552,6 +554,8 @@ function redraw(gd) {
     });
 }
 
+const generateId = () => Math.random().toString(36).substr(2, 10);
+
 /**
  * Convenience function to make idempotent plot option obvious to users.
  *
@@ -561,7 +565,9 @@ function redraw(gd) {
  * @param {Object} config
  */
 function newPlot(gd, data, layout, config) {
+    gd.dataset.chartId = generateId()
     gd = Lib.getGraphDiv(gd);
+    window[`plotly-${gd.dataset.chartId}`] = {}
 
     // remove gl contexts
     Plots.cleanPlot([], {}, gd._fullData || [], gd._fullLayout || {});
@@ -2635,7 +2641,9 @@ function applyUIRevisions(data, layout, oldFullData, oldFullLayout) {
  *      object containing `data`, `layout`, `config`, and `frames` members
  *
  */
-function react(gd, data, layout, config, isForce) {
+function react(gd, data, layout, config, isForce, xAxisRange) {
+    window[`plotly-${gd.dataset.chartId}`].xAxisRange = xAxisRange;
+
     var frames, plotDone;
 
     function addFrames() { return exports.addFrames(gd, frames); }
@@ -2744,7 +2752,7 @@ function react(gd, data, layout, config, isForce) {
             });
         } else if(isForce || restyleFlags.fullReplot || relayoutFlags.layoutReplot || configChanged) {
             gd._fullLayout._skipDefaults = true;
-            window.isForceRerender = true
+            window[`plotly-${gd.dataset.chartId}`].isForceRerender = true
             seq.push(exports._doPlot);
         } else {
             for(var componentType in relayoutFlags.arrays) {

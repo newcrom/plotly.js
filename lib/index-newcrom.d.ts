@@ -435,7 +435,8 @@ export function react(
   data: Data[],
   layout?: Partial<Layout>,
   config?: Partial<Config>,
-  isForceUpdate?: boolean
+  isForceUpdate?: boolean,
+  xAxisRange?: [x0: number, x1: number] | null
 ): Promise<PlotlyHTMLElement>;
 export function addFrames(root: Root, frames: Array<Partial<Frame>>): Promise<PlotlyHTMLElement>;
 export function deleteFrames(root: Root, frames: number[]): Promise<PlotlyHTMLElement>;
