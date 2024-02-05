@@ -398,24 +398,27 @@ function makeDragBox(gd, plotinfo, x, y, w, h, ns, ew) {
             } else {
                 noZoom();
             }
-        } else if(!yActive || dy < Math.min(Math.max(dx * 0.6, MINDRAG), MINZOOM)) {
-            // look for small drags in one direction or the other,
-            // and only drag the other axis
-
-            if(dx < MINDRAG || !xActive) {
-                noZoom();
-            } else {
-                box.t = 0;
-                box.b = ph;
-                zoomMode = 'x';
-                corners.attr('d', xCorners(box, y0));
-            }
-        } else if(!xActive || dx < Math.min(dy * 0.6, MINZOOM)) {
-            box.l = 0;
-            box.r = pw;
-            zoomMode = 'y';
-            corners.attr('d', yCorners(box, x0));
-        } else {
+        }
+        // !!! To disable single axis scaling
+        // else if(!yActive || dy < Math.min(Math.max(dx * 0.6, MINDRAG), MINZOOM)) {
+        //     // look for small drags in one direction or the other,
+        //     // and only drag the other axis
+        //
+        //     if(dx < MINDRAG || !xActive) {
+        //         noZoom();
+        //     } else {
+        //         box.t = 0;
+        //         box.b = ph;
+        //         zoomMode = 'x';
+        //         corners.attr('d', xCorners(box, y0));
+        //     }
+        // } else if(!xActive || dx < Math.min(dy * 0.6, MINZOOM)) {
+        //     box.l = 0;
+        //     box.r = pw;
+        //     zoomMode = 'y';
+        //     corners.attr('d', yCorners(box, x0));
+        // }
+        else {
             zoomMode = 'xy';
             corners.attr('d', xyCorners(box));
         }
