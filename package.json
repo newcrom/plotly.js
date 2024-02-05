@@ -1,19 +1,19 @@
 {
-  "name": "plotly.js-newcrom",
-  "version": "2.27.1-1",
-  "description": "The open source javascript graphing library that powers plotly",
+  "name": "@newcrom/plotly.js",
+  "version": "0.1.7",
+  "description": "Forked version of plotly.js with some hacks for use in Newcrom's products. The version is based on plotly.js@2.27.1",
   "license": "MIT",
   "main": "./lib/index-newcrom.js",
   "types": "./lib/index-newcrom.d.ts",
   "webpack": "./lib/index-newcrom.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/plotly/plotly.js.git"
+    "url": "https://github.com/newcrom/plotly.js.git"
   },
   "bugs": {
-    "url": "https://github.com/plotly/plotly.js/issues"
+    "url": "https://github.com/newcrom/plotly.js/issues"
   },
-  "author": "Plotly, Inc.",
+  "author": "Newcrom",
   "keywords": [
     "graphing",
     "plotting",
@@ -63,7 +63,6 @@
     "preversion": "check-node-version --node 16 --npm 8 && npm-link-check && npm ls --prod --all",
     "version": "npm run build && npm run no-bad-char && git add -A lib dist build src/version.js",
     "postversion": "node -e \"console.log('Version bumped and committed. If ok, run: git push && git push --tags')\"",
-    "postpublish": "node tasks/sync_packages.js",
     "postshrinkwrap": "chttps .",
     "prepare": "npm run create-newcrom-bundle"
   },
