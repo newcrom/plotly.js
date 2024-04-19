@@ -2524,7 +2524,8 @@ axes.drawOne = function(gd, ax, opts) {
     var minorTickSigns = axes.getTickSigns(ax, 'minor');
 
     if(ax.ticks || (ax.minor && ax.minor.ticks)) {
-        var majorTickPath = axes.makeTickPath(ax, mainLinePositionShift, majorTickSigns[2]);
+        // +4 shift for ticks was added
+        var majorTickPath = axes.makeTickPath(ax, mainLinePositionShift + 4, majorTickSigns[2]);
         var minorTickPath = axes.makeTickPath(ax, mainLinePositionShift, minorTickSigns[2], { minor: true });
 
         var mirrorMajorTickPath;

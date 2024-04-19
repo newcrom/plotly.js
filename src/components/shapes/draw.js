@@ -113,6 +113,7 @@ function drawOne(gd, index) {
         var attrs = {
             'data-index': index,
             'fill-rule': options.fillrule,
+            'id': options.name,
             d: d
         };
 
