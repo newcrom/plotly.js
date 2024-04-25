@@ -441,6 +441,18 @@ export function react(
 export function addFrames(root: Root, frames: Array<Partial<Frame>>): Promise<PlotlyHTMLElement>;
 export function deleteFrames(root: Root, frames: number[]): Promise<PlotlyHTMLElement>;
 export function register(modules: PlotlyModule | PlotlyModule[]): void;
+export function zoom(
+    gd: PlotlyHTMLElement,
+    zoomBounds: ZoomBounds,
+): void;
+
+type ZoomBounds = {
+  x0: number;
+  x1: number;
+  y0: number;
+  y1: number;
+};
+
 
 // Layout
 export interface Layout {
