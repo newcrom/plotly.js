@@ -1,6 +1,6 @@
 {
   "name": "@newcrom/plotly.js",
-  "version": "0.1.7",
+  "version": "0.1.10",
   "description": "Forked version of plotly.js with some hacks for use in Newcrom's products. The version is based on plotly.js@2.27.1",
   "license": "MIT",
   "main": "./lib/index-newcrom.js",

@@ -576,6 +576,15 @@ function newPlot(gd, data, layout, config) {
     return exports._doPlot(gd, data, layout, config);
 }
 
+const zoom = (gd, {x0, x1, y0, y1}) => {
+    Registry.call('_guiRelayout', gd, {
+        "xaxis.range[0]": x0,
+        "xaxis.range[1]": x1,
+        "yaxis.range[0]": y0,
+        "yaxis.range[1]": y1
+    });
+};
+
 /**
  * Wrap negative indicies to their positive counterparts.
  *
@@ -3867,6 +3876,7 @@ exports.moveTraces = moveTraces;
 exports.prependTraces = prependTraces;
 
 exports.newPlot = newPlot;
+exports.zoom = zoom;
 exports._doPlot = _doPlot;
 exports.purge = purge;
 

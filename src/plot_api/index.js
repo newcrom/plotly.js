@@ -13,6 +13,7 @@ exports._guiRelayout = main._guiRelayout;
 exports._guiUpdate = main._guiUpdate;
 exports._storeDirectGUIEdit = main._storeDirectGUIEdit;
 exports.react = main.react;
+exports.zoom = main.zoom;
 exports.extendTraces = main.extendTraces;
 exports.prependTraces = main.prependTraces;
 exports.addTraces = main.addTraces;
