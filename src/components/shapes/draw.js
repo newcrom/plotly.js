@@ -196,6 +196,7 @@ function drawOne(gd, index) {
 
         queueMicrotask(() => {
             path.node().addEventListener('mousedown', window.plotlyStartZooming)
+            path.node().addEventListener('touchstart', window.plotlyStartZooming)
         })
     }
 }
