@@ -2997,7 +2997,7 @@ function getTickLabelUV(ax) {
     var isLeft = has('left');
     var isRight = has('right');
     var isBottom = has('bottom');
-    var isInside = has('inside');
+    var isInside = has('inside') || has('fakeInsideTop');
 
     var isAligned = isBottom || isLeft || isTop || isRight;
 
@@ -3093,7 +3093,7 @@ axes.makeLabelFns = function(ax, shift, angle) {
     var isBottom = has('bottom');
     var isAligned = isBottom || isLeft || isTop || isRight;
 
-    var insideTickLabels = has('inside');
+    var insideTickLabels = has('inside') || has('fakeInsideTop');
     var labelsOverTicks =
         (ticklabelposition === 'inside' && ax.ticks === 'inside') ||
         (!insideTickLabels && ax.ticks === 'outside' && ax.tickson !== 'boundaries');
@@ -3121,6 +3121,28 @@ axes.makeLabelFns = function(ax, shift, angle) {
         labelStandoff += 0.2 * ax.tickfont.size;
     }
     labelStandoff += (ax.linewidth || 1) / 2 * (insideTickLabels ? -1 : 1);
+
+    // ---------------------------------------------------------------------
+    // FakeInsideTop ticklabelposition handling: apply artificial shift so that
+    // labels start inside the plotting area, but keep them classified as
+    // "outside" for the rest of the logic (avoids bugs related to "inside")
+    // ---------------------------------------------------------------------
+    if(has('fakeInsideTop')) {
+        // Fixed offset equal to approx half the font height.
+        var fakeInsideTopOffset = (ax.tickfont && ax.tickfont.size ? ax.tickfont.size * 0.8 : 8) + (ax.ticklen || 0);
+        var axLetterFakeInsideTop = ax._id.charAt(0);
+
+        if(axLetterFakeInsideTop === 'x') {
+            // shift along y direction
+            var dirY = (ax.side === 'bottom') ? -1 : 1; // into plot
+            labelStandoff += fakeInsideTopOffset * dirY;
+        } else if(axLetterFakeInsideTop === 'y') {
+            // shift along x direction
+            var dirX = (ax.side === 'left') ? 1 : -1; // into plot (right for left-side axis)
+            // For y axes, positive labelStandoff increases distance along x
+            labelStandoff += fakeInsideTopOffset * dirX;
+        }
+    }
 
     var out = {
         labelStandoff: labelStandoff,
@@ -3161,9 +3183,15 @@ axes.makeLabelFns = function(ax, shift, angle) {
             xQ = (MID_SHIFT / 2) * (tickangle / 90);
         }
 
-        out.xFn = function(d) { return d.dx + x0 + xQ * d.fontSize; };
+        var fakeInsideTopInlineOffsetX = has('fakeInsideTop') ? ((d) => (d.fontSize ? 0.2 * d.fontSize : 3)) : (() => 0);
+
+        out.xFn = function(d) { return d.dx + x0 + xQ * d.fontSize + fakeInsideTopInlineOffsetX(d) * 1; };
         out.yFn = function(d) { return d.dy + y0 + d.fontSize * ff; };
         out.anchorFn = function(d, a) {
+            if(has('fakeInsideTop')) {
+                return 'start';
+            }
+
             if(isAligned) {
                 if(isLeft) return 'end';
                 if(isRight) return 'start';
@@ -3211,9 +3239,21 @@ axes.makeLabelFns = function(ax, shift, angle) {
             }
         }
 
-        out.xFn = function(d) { return d.dx + shift - (x0 + d.fontSize * ff) * flipIt + xQ * d.fontSize; };
-        out.yFn = function(d) { return d.dy + y0 + d.fontSize * MID_SHIFT; };
+        var fakeInsideTopInlineOffsetY = has('fakeInsideTop') ? ((d) => (d.fontSize ? 0.15 * d.fontSize : 2) + (ax.ticklen || 0)) : (() => 0);
+
+        out.xFn = function(d) {
+            var base = ax.side === 'left' ? 0.5 : -1;
+            var extra = has('fakeInsideTop') ? fakeInsideTopInlineOffsetY(d) * base : 0;
+            return d.dx + shift + extra;
+        };
+        out.yFn = function(d) {
+            var vShift = has('fakeInsideTop') ? -0.5 * d.fontSize : 0;
+            return d.dy + y0 + d.fontSize * MID_SHIFT + vShift;
+        };
         out.anchorFn = function(d, a) {
+            if(has('fakeInsideTop')) {
+                return ax.side === 'left' ? 'start' : 'end';
+            }
             if(isNumeric(a) && Math.abs(a) === 90) {
                 return 'middle';
             }

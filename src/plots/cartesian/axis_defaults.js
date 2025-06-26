@@ -65,15 +65,17 @@ module.exports = function handleAxisDefaults(containerIn, containerOut, coerce, 
             ticklabelposition: {
                 valType: 'enumerated',
                 dflt: 'outside',
-                values: ticklabelmode === 'period' ? ['outside', 'inside'] :
+                values: ticklabelmode === 'period' ? ['outside', 'inside', 'fakeInsideTop'] :
                 letter === 'x' ? [
                     'outside', 'inside',
                     'outside left', 'inside left',
-                    'outside right', 'inside right'
+                    'outside right', 'inside right',
+                    'fakeInsideTop'
                 ] : [
                     'outside', 'inside',
                     'outside top', 'inside top',
-                    'outside bottom', 'inside bottom'
+                    'outside bottom', 'inside bottom',
+                    'fakeInsideTop'
                 ]
             }
         }, 'ticklabelposition');

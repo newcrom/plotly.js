@@ -179,7 +179,8 @@ module.exports = overrideAll({
             'outside top', 'inside top',
             'outside left', 'inside left',
             'outside right', 'inside right',
-            'outside bottom', 'inside bottom'
+            'outside bottom', 'inside bottom',
+            'fakeInsideTop'
         ],
         dflt: 'outside',
         description: [
