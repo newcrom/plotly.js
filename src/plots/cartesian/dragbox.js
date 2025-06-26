@@ -830,22 +830,17 @@ function makeDragBox(gd, plotinfo, x, y, w, h, ns, ew) {
                 if(!ax.fixedrange) {
                     var axName = ax._name;
 
-                    const xAxisRange = window[`plotly-${gd.dataset.chartId}`].xAxisRange
-                    if (xAxisRange != null && axName === 'xaxis'){
-                        attrs[axName + '.range'] = [...xAxisRange];
+                    var autorangeInitial = ax._autorangeInitial;
+                    if(ax._rangeInitial0 === undefined && ax._rangeInitial1 === undefined) {
+                        attrs[axName + '.autorange'] = true;
+                    } else if(ax._rangeInitial0 === undefined) {
+                        attrs[axName + '.autorange'] = autorangeInitial;
+                        attrs[axName + '.range'] = [null, ax._rangeInitial1];
+                    } else if(ax._rangeInitial1 === undefined) {
+                        attrs[axName + '.range'] = [ax._rangeInitial0, null];
+                        attrs[axName + '.autorange'] = autorangeInitial;
                     } else {
-                        var autorangeInitial = ax._autorangeInitial;
-                        if (ax._rangeInitial0 === undefined && ax._rangeInitial1 === undefined) {
-                            attrs[axName + '.autorange'] = true;
-                        } else if (ax._rangeInitial0 === undefined) {
-                            attrs[axName + '.autorange'] = autorangeInitial;
-                            attrs[axName + '.range'] = [null, ax._rangeInitial1];
-                        } else if (ax._rangeInitial1 === undefined) {
-                            attrs[axName + '.range'] = [ax._rangeInitial0, null];
-                            attrs[axName + '.autorange'] = autorangeInitial;
-                        } else {
-                            attrs[axName + '.range'] = [ax._rangeInitial0, ax._rangeInitial1];
-                        }
+                        attrs[axName + '.range'] = [ax._rangeInitial0, ax._rangeInitial1];
                     }
                 }
             }

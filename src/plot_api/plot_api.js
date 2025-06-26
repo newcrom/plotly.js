@@ -330,10 +330,9 @@ function _doPlot(gd, data, layout, config) {
 
         subroutines.doAutoRangeAndConstraints(gd);
 
-        // !!! We don't need to save an initial range because we change it if we apply a detection time.
         // store initial ranges *after* enforcing constraints, otherwise
         // we will never look like we're at the initial ranges
-        // if(graphWasEmpty) Axes.saveRangeInitial(gd);
+        if(graphWasEmpty) Axes.saveRangeInitial(gd);
 
         // this one is different from shapes/annotations calcAutorange
         // the others incorporate those components into ax._extremes,
@@ -366,8 +365,7 @@ function _doPlot(gd, data, layout, config) {
                     gd._fullLayout._insideTickLabelsUpdaterange = undefined;
 
                     return relayout(gd, insideTickLabelsUpdaterange).then(function() {
-                        // !!! We don't need to save an initial range because we change it if we apply a detection time.
-                        // Axes.saveRangeInitial(gd, true);
+                        Axes.saveRangeInitial(gd, true);
                     });
                 }
             }
@@ -2650,9 +2648,7 @@ function applyUIRevisions(data, layout, oldFullData, oldFullLayout) {
  *      object containing `data`, `layout`, `config`, and `frames` members
  *
  */
-function react(gd, data, layout, config, isForce, xAxisRange) {
-    window[`plotly-${gd.dataset.chartId}`].xAxisRange = xAxisRange;
-
+function react(gd, data, layout, config, isForce) {
     var frames, plotDone;
 
     function addFrames() { return exports.addFrames(gd, frames); }

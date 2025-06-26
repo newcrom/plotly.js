@@ -1,5 +1,27 @@
 **Forked version of plotly.js with some hacks for use in Newcrom's products**
 
+# Local Testing with `npm link`
+
+To test the fork of `plotly.js` in another project without publishing:
+
+1. **In root fork directory**
+   ```bash
+   npm install        # install dependencies
+   npm link           # register your local package globally
+   ```
+
+2. **In the project where you want to use the fork**
+   ```bash
+    npm link @newcrom/plotly.js
+    ```
+   Do not forget ro restart your development server
+
+
+3. ** To unregister the local package globally**
+   ```bash
+   npm unlink @newcrom/plotly.js
+   ```
+
 <a href="https://plotly.com/javascript/"><img src="https://images.plot.ly/logo/plotlyjs-logo@2x.png" height="70"></a>
 
 [![npm version](https://badge.fury.io/js/plotly.js.svg)](https://badge.fury.io/js/plotly.js)
